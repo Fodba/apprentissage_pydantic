@@ -244,6 +244,7 @@ donnees_commande = {
         "ville": " lille ",
     },
     "date_commande": "2026-06-15",
+    # "date_livraison": "2026-06-19",
     "lignes": [
         {"produit_id": 1, "quantite": 1, "prix_unitaire": "89.90"},
         {"produit_id": 5, "quantite": 2, "prix_unitaire": "19.90"},
@@ -293,6 +294,7 @@ sep()
 donnees_plates = commande.model_dump(mode="json")
 print(donnees_plates)
 sep()
+donnees_json = commande.model_dump_json(indent=2,exclude_none=True)
 donnees_json = commande.model_dump_json(indent=2)
 print(donnees_json)
 sep()
@@ -304,12 +306,11 @@ with open("pydantic_commande.json", "w", encoding="utf-8") as fichier:
 with open("pydantic_commande.json", encoding="utf-8") as fichier:
     try:
         commande_relue = Commande.model_validate_json(fichier.read())
+        print(type(commande_relue.date_commande), type(commande_relue.lignes[0].prix_unitaire))
+        print(f"Identique à l'originale ? {commande_relue == commande}")
     except ValidationError as e:
         afficher_erreurs(e)
     except ValueError as e:
         afficher_erreurs(e)
     except TypeError as e:
         afficher_erreurs(e)
-
-print(type(commande_relue.date_commande), type(commande_relue.lignes[0].prix_unitaire))
-print(f"Identique à l'originale ? {commande_relue == commande}")
