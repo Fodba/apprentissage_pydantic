@@ -1,0 +1,28 @@
+{
+  "id": 91,
+  "client": {
+    "prenom": "Alice",
+    "nom": "Martin",
+    "email": "alice.martin@example.com",
+    "telephone": "06 13 45 41 38",
+    "ville": "Lille"
+  },
+  "date_commande": "2026-06-15",
+  "date_livraison": null,
+  "statut": "en cours",
+  "lignes": [
+    {
+      "produit_id": 1,
+      "quantite": 1,
+      "prix_unitaire": "89.90",
+      "montant": "89.90"
+    },
+    {
+      "produit_id": 5,
+      "quantite": 2,
+      "prix_unitaire": "19.90",
+      "montant": "39.80"
+    }
+  ],
+  "total": "129.70"
+}
