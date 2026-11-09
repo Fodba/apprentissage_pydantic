@@ -4,4 +4,4 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///../database/ma_bdd.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./database/ma_bdd.db")

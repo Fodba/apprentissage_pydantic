@@ -3,7 +3,6 @@ from sqlalchemy import Float, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 from core.database import Base
-from .ville import Ville
 
 
 class Releve(Base):

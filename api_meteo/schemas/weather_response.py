@@ -3,12 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-
-def sep(nombre=50):
-    print("=" * nombre)
-
-
 class CurrentWeather(BaseModel):
+    """format attendu d'une ligne de relevé météo"""
     time: datetime
     interval: int
     temperature: float
@@ -19,11 +15,10 @@ class CurrentWeather(BaseModel):
 
 
 class WeatherResponseModel(BaseModel):
+    """format attendu de la réponse de l'API météo pour une ville"""
     latitude:float = Field(ge=-90,le=90)
     longitude:float = Field(ge=-180,le=180)
     elevation:float
     timezone:str
     timezone_abbreviation:str
     current_weather : CurrentWeather
-
-

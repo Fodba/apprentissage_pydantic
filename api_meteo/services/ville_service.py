@@ -1,16 +1,10 @@
 import requests
 from rich import print
-from core.utils import sep
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import func, select
 from schemas.ville_schema import VilleSchema
 from models.ville import Ville
 
-def print_ville(ville):
-    if ville is not None:
-        print(
-            f"{ville.nom} ({ville.id})"
-        )
 
 def coordonnees_ville(http_session,nom:str):
     """Permet de récupérer les coordonnées d'un ville
@@ -44,46 +38,32 @@ def coordonnees_ville(http_session,nom:str):
         return None
 
 
-def localise_villes(http_session, villes):
-    with http_session:
-        http_session.headers.update({
-            "User-Agent": "api_meteo/1.0",
-            "Accept": "application/json",
-        })
-
-        liste_coordonnes = []
-        for ville in villes:
-            sep()
-            print(f"Ville: {ville}")
-            sep()
-
-            coords = coordonnees_ville(http_session,ville)
-            if coords is None:
-                # print("Une erreur s'est produite")
-                continue
-            else:
-                liste_coordonnes.append(coords)
-        return liste_coordonnes
-
 
 def chercher_ville(session: Session, ville):
-    requete = select(Ville).where(Ville.nom == ville.nom)
+    """Renvoie une ville si elle est présente en base de données"""
+    requete = select(Ville).where(func.lower(Ville.nom) == ville.lower())
     ville_recu = session.scalar(requete)
-    print_ville(ville_recu)
+    # print_ville(ville_recu)
     return ville_recu
 
+def lister_villes(session: Session):
+    """liste toutes les villes de la base de données"""
+    requete = select(Ville)
+    villes = session.scalars(requete).all()
+    return villes
+
+
 def inserer_ville(session: Session, ville):
+    """insère une ville dans la base de données"""
     coordonnees = VilleSchema.model_validate(ville)
     
-    result = chercher_ville(session,coordonnees)
+    result = chercher_ville(session,coordonnees.nom)
 
     if result is None:
         coor = coordonnees.model_dump()
         ville_actuelle = Ville(**coor)
         session.add(ville_actuelle)
         session.commit()
-        print_ville(ville_actuelle)
         return ville_actuelle
     else:
-        print_ville(result)
         return result
